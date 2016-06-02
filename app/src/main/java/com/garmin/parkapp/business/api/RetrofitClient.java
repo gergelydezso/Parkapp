@@ -1,5 +1,6 @@
 package com.garmin.parkapp.business.api;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -8,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitClient {
 
-    private final static String BASE_URL = "https://api.github.com/";
+    private final static String BASE_URL = "http://10.68.28.50:8080/parkapp/";
 
     private static RetrofitClient instance;
 
@@ -26,9 +27,12 @@ public class RetrofitClient {
     }
 
     private RetrofitClient() {
+
+        OkHttpClient client = new OkHttpClient();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
     }
 }

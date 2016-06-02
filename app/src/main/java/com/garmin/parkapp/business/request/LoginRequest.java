@@ -3,6 +3,7 @@ package com.garmin.parkapp.business.request;
 import com.garmin.parkapp.business.response.LoginResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.Credentials;
+import com.google.gson.annotations.SerializedName;
 
 import java.lang.ref.WeakReference;
 
@@ -17,6 +18,10 @@ import retrofit2.Response;
  */
 public class LoginRequest extends BaseRequest {
 
+    private final static String ACCEPT = "application/json";
+    private final static String AUTHORIZATION = "Basic cGFya2FwcC1tb2JpbGU6MTIzNDU2";
+    private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
+
     private WeakReference<LoginRequestResponse> loginRequestResponseWeakReference;
 
     public LoginRequest(LoginRequestResponse loginRequestResponse) {
@@ -26,7 +31,13 @@ public class LoginRequest extends BaseRequest {
     public void executeLogin(Credentials credentials) {
         Logger.INSTANCE.d("executeLogin(credentials = %s)", credentials);
 
-        parkingServiceApi.login(credentials).enqueue(new Callback<LoginResponse>() {
+        LoginData loginData = new LoginData(credentials);
+
+        parkingServiceApi.login(
+                CONTENT_TYPE,
+                AUTHORIZATION,
+                ACCEPT,
+                loginData).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 Logger.INSTANCE.d("onResponse()");
@@ -40,7 +51,7 @@ public class LoginRequest extends BaseRequest {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Logger.INSTANCE.d("onFailure()");
+                Logger.INSTANCE.e("onFailure(t = %s)", t);
 
                 if (loginRequestResponseWeakReference != null) {
                     if (loginRequestResponseWeakReference.get() != null) {
@@ -55,5 +66,36 @@ public class LoginRequest extends BaseRequest {
         void onResponse(LoginResponse loginResponse);
 
         void onError();
+    }
+
+    public static class LoginData {
+
+        @SerializedName("username")
+        private String username;
+
+        @SerializedName("password")
+        private String password;
+
+        @SerializedName("grant_type")
+        private String grantType;
+
+        @SerializedName("scope")
+        private String scope;
+
+        @SerializedName("client_id")
+        private String clientId;
+
+        @SerializedName("client_secrete")
+        private String cliendSecrete;
+
+        public LoginData(Credentials credentials) {
+            this.username = credentials.getUsername();
+            this.password = credentials.getPassword();
+
+            this.grantType = "password";
+            this.scope = "read";
+            this.clientId = "parkapp-mobile";
+            this.cliendSecrete = "123456";
+        }
     }
 }
