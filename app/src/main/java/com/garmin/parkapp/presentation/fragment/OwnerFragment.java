@@ -9,12 +9,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.garmin.parkapp.R;
+import com.garmin.parkapp.business.PreferenceManager;
 import com.garmin.parkapp.business.request.ParkingSpotRequest;
+import com.garmin.parkapp.business.response.LoginResponse;
+import com.garmin.parkapp.business.response.LoginTypeResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.ParkingSpot;
 import com.garmin.parkapp.presentation.adapter.OwnerParkingSpotAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,13 +26,6 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
 
     private RecyclerView recyclerView;
     private TextView emptyView;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        requestYourParkingSpots();
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -47,10 +42,8 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        OwnerParkingSpotAdapter adapter = new OwnerParkingSpotAdapter(new ArrayList<ParkingSpot>());
-        recyclerView.setAdapter(adapter);
-
         showEmptyListMessage();
+        requestYourParkingSpots();
     }
 
     @Override
@@ -79,8 +72,11 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
     private void requestYourParkingSpots() {
         Logger.INSTANCE.d("requestYourParkingSpots()");
 
+        LoginResponse loginResponse = LoginResponse.getLoginResponse(PreferenceManager.getInstance(getContext()));
+        LoginTypeResponse loginTypeResponse = LoginTypeResponse.getLoginTypeResponse(PreferenceManager.getInstance(getContext()));
+
         ParkingSpotRequest parkingSpotRequest = new ParkingSpotRequest(new ParkingSpotListener());
-        parkingSpotRequest.execute();
+        parkingSpotRequest.execute(loginResponse.getAuthorizationBearer(), loginTypeResponse);
     }
 
     private void showEmptyListMessage() {
@@ -99,7 +95,10 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
 
         @Override
         public void onResponse(List<ParkingSpot> parkingSpotList) {
-            Logger.INSTANCE.d("onResponse()");
+            Logger.INSTANCE.d("onResponse(parkingSpotList = %d)", parkingSpotList == null ? 0 : parkingSpotList.size());
+
+            OwnerParkingSpotAdapter adapter = new OwnerParkingSpotAdapter(parkingSpotList);
+            recyclerView.setAdapter(adapter);
 
             showEmptyListMessage();
         }

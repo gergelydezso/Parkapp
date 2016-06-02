@@ -82,8 +82,8 @@ public class GuestFragment extends BaseFragment implements View.OnClickListener,
     private void requestYourParkingSpots() {
         Logger.INSTANCE.d("requestYourParkingSpots()");
 
-        ParkingSpotRequest parkingSpotRequest = new ParkingSpotRequest(new ParkingSpotListener());
-        parkingSpotRequest.execute();
+//        ParkingSpotRequest parkingSpotRequest = new ParkingSpotRequest(new ParkingSpotListener());
+//        parkingSpotRequest.execute();
     }
 
     private void showEmptyListMessage() {

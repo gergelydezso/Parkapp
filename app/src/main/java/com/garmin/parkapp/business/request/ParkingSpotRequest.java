@@ -1,5 +1,7 @@
 package com.garmin.parkapp.business.request;
 
+import com.garmin.parkapp.business.ParkingSpotFilter;
+import com.garmin.parkapp.business.response.LoginTypeResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.ParkingSpot;
 
@@ -21,16 +23,20 @@ public class ParkingSpotRequest extends BaseRequest {
         this.parkingSpotResponseWeakReference = new WeakReference<>(parkingSpotResponse);
     }
 
-    public void execute() {
-        Logger.INSTANCE.d("execute()");
+    public void execute(String authorization, final LoginTypeResponse loginTypeResponse) {
+        Logger.INSTANCE.d("execute(authorization = %s)", authorization);
 
-        parkingServiceApi.getParkingSpots().enqueue(new Callback<List<ParkingSpot>>() {
+        parkingServiceApi.getParkingSpots(authorization).enqueue(new Callback<List<ParkingSpot>>() {
             @Override
             public void onResponse(Call<List<ParkingSpot>> call, Response<List<ParkingSpot>> response) {
                 Logger.INSTANCE.d("onResponse()");
 
                 if (parkingSpotResponseWeakReference != null) {
                     if (parkingSpotResponseWeakReference.get() != null) {
+
+                        ParkingSpotFilter parkingSpotFilter = new ParkingSpotFilter();
+                        parkingSpotFilter.showYourParkingSpotsOnly(response.body(), loginTypeResponse);
+
                         parkingSpotResponseWeakReference.get().onResponse(response.body());
                     }
                 }

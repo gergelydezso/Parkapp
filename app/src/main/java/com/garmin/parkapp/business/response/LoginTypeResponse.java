@@ -8,7 +8,10 @@ import com.google.gson.annotations.SerializedName;
  */
 public class LoginTypeResponse {
 
-    private final static String LOGIN_TYPE = "login.type";
+    private final static String USER_ID = "user.id";
+    private final static String USER_ROLE = "user.role";
+    private final static String CAN_OPEN_DOOR = "can.open.door";
+    private final static String ASSIGNED_SPOT = "assigned.spot";
 
     @SerializedName("userID")
     private String userId;
@@ -26,14 +29,37 @@ public class LoginTypeResponse {
         this.userRole = loginType;
     }
 
+    public LoginTypeResponse(String userId, String userRole, String canOpenBarrier, String assignedSpot) {
+        this.userId = userId;
+        this.userRole = userRole;
+        this.canOpenBarrier = canOpenBarrier;
+        this.assignedSpot = assignedSpot;
+    }
+
     public void saveResponse(PreferenceManager preferenceManager) {
-        preferenceManager.writeString(LOGIN_TYPE, userRole);
+        preferenceManager.writeString(USER_ID, userId);
+        preferenceManager.writeString(USER_ROLE, userRole);
+        preferenceManager.writeString(CAN_OPEN_DOOR, canOpenBarrier);
+        preferenceManager.writeString(ASSIGNED_SPOT, assignedSpot);
     }
 
     public static UserType getUserType(PreferenceManager preferenceManager) {
 
-        String savedUserTYpe = preferenceManager.getString(LOGIN_TYPE);
+        String savedUserTYpe = preferenceManager.getString(USER_ROLE);
         return UserType.getFromString(savedUserTYpe);
+    }
+
+    public static LoginTypeResponse getLoginTypeResponse(PreferenceManager preferenceManager) {
+
+        String saveUserType = preferenceManager.getString(USER_ROLE);
+        String userId = preferenceManager.getString(USER_ID);
+        String canOpenBarrier = preferenceManager.getString(CAN_OPEN_DOOR);
+        String assignedSpot = preferenceManager.getString(ASSIGNED_SPOT);
+
+        return new LoginTypeResponse(userId,
+                saveUserType,
+                canOpenBarrier,
+                assignedSpot);
     }
 
     public UserType getUserType() {
@@ -48,6 +74,22 @@ public class LoginTypeResponse {
                 ", canOpenBarrier=" + canOpenBarrier +
                 ", assignedSpot='" + assignedSpot + '\'' +
                 '}';
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public String getCanOpenBarrier() {
+        return canOpenBarrier;
+    }
+
+    public String getAssignedSpot() {
+        return assignedSpot;
     }
 
     public enum UserType {

@@ -36,6 +36,8 @@ public interface ParkingServiceApi {
             @Header("Authorization") String authorization,
             @Query("username") String username);
 
-    @GET("/parkingSpots")
-    Call<List<ParkingSpot>> getParkingSpots();
+    @GET("slot/list")
+    Call<List<ParkingSpot>> getParkingSpots(
+            @Header("Authorization") String authorization
+    );
 }

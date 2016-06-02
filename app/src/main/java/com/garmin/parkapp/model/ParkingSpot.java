@@ -1,31 +1,31 @@
 package com.garmin.parkapp.model;
 
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * @author morari on 6/2/16.
  */
 public class ParkingSpot {
 
-    private long date = 0;
+    @SerializedName("day")
+    private String day;
+
+    @SerializedName("ownerId")
     private String ownerId;
+
+    @SerializedName("guestId")
     private String guestId;
 
-    public String getParkingNumber() {
-        return parkingNumber;
-    }
+    @SerializedName("slot_no")
+    private String slotNumber;
 
-    private String parkingNumber;
+    public String getParkingNumber() {
+        return slotNumber;
+    }
 
     public String getParkingDateTime() {
 
-        Date date = new Date(this.date);
-
-        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss", Locale.getDefault());
-        return format.format(date);
+        return day;
     }
 
     public String getOwnerId() {
@@ -35,10 +35,10 @@ public class ParkingSpot {
     @Override
     public String toString() {
         return "ParkingSpot{" +
-                "date=" + date +
+                "day='" + day + '\'' +
                 ", ownerId='" + ownerId + '\'' +
                 ", guestId='" + guestId + '\'' +
-                ", parkingNumber='" + parkingNumber + '\'' +
+                ", slotNumber='" + slotNumber + '\'' +
                 '}';
     }
 }
