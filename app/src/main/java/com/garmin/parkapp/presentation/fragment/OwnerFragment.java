@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.garmin.parkapp.R;
 import com.garmin.parkapp.business.request.ParkingSpotRequest;
@@ -21,6 +22,9 @@ import java.util.List;
  */
 public class OwnerFragment extends BaseFragment implements View.OnClickListener {
 
+    private RecyclerView recyclerView;
+    private TextView emptyView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +38,9 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
 
         view.findViewById(R.id.owner_add_spot).setOnClickListener(this);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.owner_recycler_view);
+        emptyView = (TextView) view.findViewById(R.id.owner_empty_view);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.owner_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -42,6 +48,8 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
 
         OwnerParkingSpotAdapter adapter = new OwnerParkingSpotAdapter(new ArrayList<ParkingSpot>());
         recyclerView.setAdapter(adapter);
+
+        showEmptyListMessage();
     }
 
     @Override
@@ -72,6 +80,18 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
 
         ParkingSpotRequest parkingSpotRequest = new ParkingSpotRequest(new ParkingSpotListener());
         parkingSpotRequest.execute();
+    }
+
+    private void showEmptyListMessage() {
+        Logger.INSTANCE.d("showEmptyListMessage()");
+
+        if (recyclerView.getChildCount() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     private class ParkingSpotListener implements ParkingSpotRequest.ParkingSpotResponse {

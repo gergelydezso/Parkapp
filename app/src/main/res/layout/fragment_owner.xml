@@ -10,6 +10,14 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
 
+    <TextView
+        android:id="@+id/owner_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/owner_no_free_spots"
+        android:textSize="20sp" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/owner_add_spot"
         android:layout_width="wrap_content"

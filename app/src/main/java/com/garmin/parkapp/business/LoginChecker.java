@@ -2,7 +2,7 @@ package com.garmin.parkapp.business;
 
 import android.text.TextUtils;
 
-import com.garmin.parkapp.presentation.fragment.LoginFragment;
+import com.garmin.parkapp.business.response.LoginResponse;
 
 /**
  * @author morari on 6/2/16.
@@ -10,13 +10,13 @@ import com.garmin.parkapp.presentation.fragment.LoginFragment;
 public class LoginChecker {
 
     public boolean isLoggedIn(PreferenceManager preferenceManager) {
-        return !TextUtils.isEmpty(preferenceManager.getString(LoginFragment.LOGIN_TOKEN));
+        return !TextUtils.isEmpty(preferenceManager.getString(LoginResponse.LOGIN_TOKEN));
     }
 
     public UserType getLoginType(PreferenceManager preferenceManager) {
 
         UserType userType;
-        int typeOrdinal = preferenceManager.getInt(LoginFragment.LOGIN_TYPE);
+        int typeOrdinal = preferenceManager.getInt(LoginResponse.LOGIN_TYPE);
 
         userType = UserType.values()[typeOrdinal];
 

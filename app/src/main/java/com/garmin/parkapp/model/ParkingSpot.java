@@ -23,4 +23,8 @@ public class ParkingSpot {
         Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss", Locale.getDefault());
         return format.format(date);
     }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
 }

@@ -14,7 +14,6 @@ import com.garmin.parkapp.business.response.LoginResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.Credentials;
 import com.garmin.parkapp.presentation.LoginListener;
-import com.garmin.parkapp.presentation.activity.MainActivity;
 
 /**
  * Fragment used to display login screen.
@@ -22,9 +21,6 @@ import com.garmin.parkapp.presentation.activity.MainActivity;
  * @author morari on 6/2/16.
  */
 public class LoginFragment extends BaseFragment implements View.OnClickListener {
-
-    public final static String LOGIN_TOKEN = "login.token";
-    public final static String LOGIN_TYPE = "login.type";
 
     private LoginListener loginListener;
     private TextInputEditText usernameInput;
@@ -72,8 +68,7 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         public void onResponse(LoginResponse loginResponse) {
             Logger.INSTANCE.d("onResponse()");
 
-//            PreferenceManager.getInstance(getContext()).writeString(LOGIN_TOKEN, loginResponse.getLoginToken());
-//            PreferenceManager.getInstance(getContext()).writeInt(LOGIN_TYPE, loginResponse.getUserType().ordinal());
+//            loginResponse.saveLoginResponse();
 
 //            loginListener.login(loginResponse.getUserType());
             loginListener.login(LoginChecker.UserType.OWNER);
