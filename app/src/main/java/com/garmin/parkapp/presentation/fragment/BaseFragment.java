@@ -3,6 +3,7 @@ package com.garmin.parkapp.presentation.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
@@ -125,5 +126,11 @@ public abstract class BaseFragment extends Fragment {
         if (actionBar != null) {
             actionBar.setTitle(title);
         }
+    }
+
+    protected void showError(int errorMessage) {
+        Logger.INSTANCE.d("showError(errorMessage = %s)", getString(errorMessage));
+
+        Snackbar.make(rootView, errorMessage, Snackbar.LENGTH_LONG).show();
     }
 }

@@ -3,6 +3,7 @@ package com.garmin.parkapp.business;
 import android.text.TextUtils;
 
 import com.garmin.parkapp.business.response.LoginResponse;
+import com.garmin.parkapp.business.response.LoginTypeResponse;
 
 /**
  * @author morari on 6/2/16.
@@ -13,18 +14,7 @@ public class LoginChecker {
         return !TextUtils.isEmpty(preferenceManager.getString(LoginResponse.LOGIN_TOKEN));
     }
 
-    public UserType getLoginType(PreferenceManager preferenceManager) {
-
-        UserType userType;
-        int typeOrdinal = preferenceManager.getInt(LoginResponse.LOGIN_TYPE);
-
-        userType = UserType.values()[typeOrdinal];
-
-        return userType;
-    }
-
-    public enum UserType {
-        OWNER,
-        GUEST
+    public LoginTypeResponse.UserType getLoginType(PreferenceManager preferenceManager) {
+        return LoginTypeResponse.getUserType(preferenceManager);
     }
 }

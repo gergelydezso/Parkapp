@@ -6,6 +6,7 @@ import android.os.Bundle;
 import com.garmin.parkapp.R;
 import com.garmin.parkapp.business.LoginChecker;
 import com.garmin.parkapp.business.PreferenceManager;
+import com.garmin.parkapp.business.response.LoginTypeResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.presentation.LoginListener;
 import com.garmin.parkapp.presentation.fragment.GuestFragment;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoginListener {
     }
 
     @Override
-    public void login(LoginChecker.UserType userType) {
+    public void login(LoginTypeResponse.UserType userType) {
         Logger.INSTANCE.d("login(userType = %s)", userType.name());
 
         showFragmentAfterLogin(userType);
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoginListener {
                 .commit();
     }
 
-    private void showFragmentAfterLogin(LoginChecker.UserType userType) {
+    private void showFragmentAfterLogin(LoginTypeResponse.UserType userType) {
         Logger.INSTANCE.d("showFragmentAfterLogin()");
 
         switch (userType) {

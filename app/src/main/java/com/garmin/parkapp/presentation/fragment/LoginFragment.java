@@ -3,14 +3,17 @@ package com.garmin.parkapp.presentation.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 
 import com.garmin.parkapp.R;
 import com.garmin.parkapp.business.LoginChecker;
 import com.garmin.parkapp.business.PreferenceManager;
+import com.garmin.parkapp.business.request.GetLoginTypeRequest;
 import com.garmin.parkapp.business.request.LoginRequest;
 import com.garmin.parkapp.business.response.LoginResponse;
+import com.garmin.parkapp.business.response.LoginTypeResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.Credentials;
 import com.garmin.parkapp.presentation.LoginListener;
@@ -68,16 +71,34 @@ public class LoginFragment extends BaseFragment implements View.OnClickListener 
         public void onResponse(LoginResponse loginResponse) {
             Logger.INSTANCE.d("onResponse()");
 
-//            loginResponse.saveLoginResponse();
+            loginResponse.saveLoginResponse(PreferenceManager.getInstance(getContext()));
 
-//            loginListener.login(loginResponse.getUserType());
-            loginListener.login(LoginChecker.UserType.OWNER);
+            GetLoginTypeRequest getLoginTypeRequest = new GetLoginTypeRequest(new LoginTypeResponseListener());
+            getLoginTypeRequest.execute(usernameInput.getText().toString(),
+                    loginResponse.getAuthorizationBearer());
         }
 
         @Override
         public void onError() {
             Logger.INSTANCE.d("onError()");
+            showError(R.string.error_occurred);
+        }
+    }
 
+    private class LoginTypeResponseListener implements GetLoginTypeRequest.LoginTypeListener {
+
+        @Override
+        public void onResponse(LoginTypeResponse loginTypeResponse) {
+            Logger.INSTANCE.d("onResponse(loginTypeResponse = %s)", loginTypeResponse);
+
+            loginTypeResponse.saveResponse(PreferenceManager.getInstance(getContext()));
+            loginListener.login(loginTypeResponse.getUserType());
+        }
+
+        @Override
+        public void onError() {
+            Logger.INSTANCE.d("onError()");
+            showError(R.string.error_occurred);
         }
     }
 }

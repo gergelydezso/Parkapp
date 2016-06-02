@@ -18,11 +18,13 @@ public class ParkingSpotFilter {
         List<ParkingSpot> parkingSpots1 = new ArrayList<>();
         LoginResponse loginResponse = LoginResponse.getLoginResponse(PreferenceManager.getInstance(context));
 
-        for (ParkingSpot parkingSpot : parkingSpots) {
-            if (parkingSpot.getOwnerId().equals(loginResponse.getOwnerId())) {
-                parkingSpots1.add(parkingSpot);
-            }
-        }
+//        for (ParkingSpot parkingSpot : parkingSpots) {
+//            if (parkingSpot.getOwnerId().equals(loginResponse.getOwnerId())) {
+//                parkingSpots1.add(parkingSpot);
+//            }
+//        }
         return parkingSpots1;
     }
 }
+
+

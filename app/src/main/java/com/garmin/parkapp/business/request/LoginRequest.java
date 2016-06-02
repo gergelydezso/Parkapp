@@ -3,7 +3,6 @@ package com.garmin.parkapp.business.request;
 import com.garmin.parkapp.business.response.LoginResponse;
 import com.garmin.parkapp.logger.Logger;
 import com.garmin.parkapp.model.Credentials;
-import com.google.gson.annotations.SerializedName;
 
 import java.lang.ref.WeakReference;
 
@@ -22,6 +21,11 @@ public class LoginRequest extends BaseRequest {
     private final static String AUTHORIZATION = "Basic cGFya2FwcC1tb2JpbGU6MTIzNDU2";
     private final static String CONTENT_TYPE = "application/x-www-form-urlencoded";
 
+    private final static String GRANT_TYPE = "password";
+    private final static String SCOPE = "read";
+    private final static String CLIENT_ID = "parkapp-mobile";
+    private final static String CLIENT_SECRET = "123456";
+
     private WeakReference<LoginRequestResponse> loginRequestResponseWeakReference;
 
     public LoginRequest(LoginRequestResponse loginRequestResponse) {
@@ -31,20 +35,28 @@ public class LoginRequest extends BaseRequest {
     public void executeLogin(Credentials credentials) {
         Logger.INSTANCE.d("executeLogin(credentials = %s)", credentials);
 
-        LoginData loginData = new LoginData(credentials);
-
         parkingServiceApi.login(
                 CONTENT_TYPE,
                 AUTHORIZATION,
                 ACCEPT,
-                loginData).enqueue(new Callback<LoginResponse>() {
+                credentials.getUsername(),
+                credentials.getPassword(),
+                GRANT_TYPE,
+                SCOPE,
+                CLIENT_ID,
+                CLIENT_SECRET).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 Logger.INSTANCE.d("onResponse()");
 
                 if (loginRequestResponseWeakReference != null) {
                     if (loginRequestResponseWeakReference.get() != null) {
-                        loginRequestResponseWeakReference.get().onResponse(response.body());
+
+                        if (response.code() == 200) {
+                            loginRequestResponseWeakReference.get().onResponse(response.body());
+                        } else {
+                            loginRequestResponseWeakReference.get().onError();
+                        }
                     }
                 }
             }
@@ -66,36 +78,5 @@ public class LoginRequest extends BaseRequest {
         void onResponse(LoginResponse loginResponse);
 
         void onError();
-    }
-
-    public static class LoginData {
-
-        @SerializedName("username")
-        private String username;
-
-        @SerializedName("password")
-        private String password;
-
-        @SerializedName("grant_type")
-        private String grantType;
-
-        @SerializedName("scope")
-        private String scope;
-
-        @SerializedName("client_id")
-        private String clientId;
-
-        @SerializedName("client_secrete")
-        private String cliendSecrete;
-
-        public LoginData(Credentials credentials) {
-            this.username = credentials.getUsername();
-            this.password = credentials.getPassword();
-
-            this.grantType = "password";
-            this.scope = "read";
-            this.clientId = "parkapp-mobile";
-            this.cliendSecrete = "123456";
-        }
     }
 }
