@@ -6,4 +6,7 @@
 
     <string name="owner_no_free_spots">No free spots!</string>
     <string name="guest_no_free_spots">No free spots! :(</string>
+
+    <string name="owner">Owner</string>
+    <string name="guest">Guest</string>
 </resources>

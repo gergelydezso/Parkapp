@@ -4,11 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.garmin.parkapp.logger.Logger;
+import com.garmin.parkapp.presentation.activity.MainActivity;
 
 /**
  * Base class for all fragments in this application.
@@ -116,4 +118,12 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract int getLayoutId();
 
+    protected void setTitleInActionBar(int title) {
+        Logger.INSTANCE.d("setTitleInActionBar(title = %s)", getString(title));
+
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
+        }
+    }
 }

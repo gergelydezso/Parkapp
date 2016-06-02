@@ -10,8 +10,16 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
 
+    <TextView
+        android:id="@+id/guest_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/guest_no_free_spots"
+        android:textSize="20sp" />
+
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/guest_occupy_spot"
+        android:id="@+id/guest_call_to_open_gate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

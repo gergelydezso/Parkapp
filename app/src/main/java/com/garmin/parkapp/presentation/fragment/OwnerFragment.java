@@ -36,6 +36,7 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        setTitleInActionBar(R.string.owner);
         view.findViewById(R.id.owner_add_spot).setOnClickListener(this);
 
         emptyView = (TextView) view.findViewById(R.id.owner_empty_view);
@@ -99,6 +100,8 @@ public class OwnerFragment extends BaseFragment implements View.OnClickListener 
         @Override
         public void onResponse(List<ParkingSpot> parkingSpotList) {
             Logger.INSTANCE.d("onResponse()");
+
+            showEmptyListMessage();
         }
 
         @Override

@@ -14,6 +14,10 @@ public class ParkingSpot {
     private String ownerId;
     private String guestId;
 
+    public String getParkingNumber() {
+        return parkingNumber;
+    }
+
     private String parkingNumber;
 
     public String getParkingDateTime() {
@@ -26,5 +30,15 @@ public class ParkingSpot {
 
     public String getOwnerId() {
         return ownerId;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingSpot{" +
+                "date=" + date +
+                ", ownerId='" + ownerId + '\'' +
+                ", guestId='" + guestId + '\'' +
+                ", parkingNumber='" + parkingNumber + '\'' +
+                '}';
     }
 }

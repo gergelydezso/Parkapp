@@ -15,7 +15,7 @@ import com.garmin.parkapp.presentation.fragment.OwnerFragment;
 public class MainActivity extends AppCompatActivity implements LoginListener {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logger.INSTANCE.d("onCreate())");
 
@@ -24,6 +24,13 @@ public class MainActivity extends AppCompatActivity implements LoginListener {
         if (savedInstanceState == null) {
             showFragment();
         }
+    }
+
+    @Override
+    public void login(LoginChecker.UserType userType) {
+        Logger.INSTANCE.d("login(userType = %s)", userType.name());
+
+        showFragmentAfterLogin(userType);
     }
 
     private void showFragment() {
@@ -75,12 +82,5 @@ public class MainActivity extends AppCompatActivity implements LoginListener {
                 showOwnerFragment();
                 break;
         }
-    }
-
-    @Override
-    public void login(LoginChecker.UserType userType) {
-        Logger.INSTANCE.d("login(userType = %s)", userType.name());
-
-        showFragmentAfterLogin(userType);
     }
 }
